@@ -22,9 +22,7 @@ var (
 	ws *utils.WebsocketMap
 )
 
-func stocktwitsMessages(w http.ResponseWriter, r *http.Request) {}
-
-func connUpgrader(w http.ResponseWriter, r *http.Request) {
+func dataPipe(w http.ResponseWriter, r *http.Request) {
 	conn, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
 		log.Println(err)
@@ -34,5 +32,5 @@ func connUpgrader(w http.ResponseWriter, r *http.Request) {
 }
 
 func buildRouter() {
-	router.HandleFunc("/", stocktwitsMessages)
+	router.HandleFunc("/", dataPipe)
 }
