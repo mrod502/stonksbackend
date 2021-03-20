@@ -3,12 +3,18 @@ package main
 import (
 	"flag"
 	"fmt"
+	"os"
+	"path"
 
 	"github.com/mrod502/stonksbackend/utils"
 )
 
 func main() {
-	configFilePath := flag.String("config-file-path", "settings.json", "a string")
+	home, err := os.UserHomeDir()
+	if err != nil {
+		panic(err)
+	}
+	configFilePath := flag.String("config-file-path", path.Join(home, "settings.json"), "a string")
 
 	flag.Parse()
 

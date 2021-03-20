@@ -24,7 +24,7 @@ var (
 
 func stocktwitsMessages(w http.ResponseWriter, r *http.Request) {}
 
-func stocktwitsUpgrader(w http.ResponseWriter, r *http.Request) {
+func connUpgrader(w http.ResponseWriter, r *http.Request) {
 	conn, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
 		log.Println(err)
