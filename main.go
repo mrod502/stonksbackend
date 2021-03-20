@@ -62,10 +62,7 @@ func main() {
 
 	utils.ReadConfig(*configFilePath)
 
-	dataSources := utils.DataSources()
-
-	fmt.Println(dataSources)
-
+	buildRouter()
 	go http.ListenAndServe(":8492", router)
 
 	go stocktwits.SuggestedStream(stocktwitsChan, time.Minute)
