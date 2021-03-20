@@ -66,7 +66,7 @@ func main() {
 
 	fmt.Println(dataSources)
 
-	go http.ListenAndServe(fmt.Sprintf(":%d", utils.ServePort()), router)
+	go http.ListenAndServe(":8492", router)
 
 	go stocktwits.SuggestedStream(stocktwitsChan, time.Minute)
 
