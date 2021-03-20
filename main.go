@@ -3,14 +3,50 @@ package main
 import (
 	"flag"
 	"fmt"
+	"log"
 	"net/http"
 	"os"
 	"path"
 	"time"
 
+	"github.com/gorilla/mux"
+	"github.com/gorilla/websocket"
 	stocktwits "github.com/mrod502/stocktwitsgo"
 	"github.com/mrod502/stonksbackend/utils"
 )
+
+func init() {
+	var err error
+	router = new(mux.Router)
+	twitsChan = make(chan stocktwits.Message, 128)
+	ws, err = utils.NewWebsocketMap(15*time.Minute, true)
+	if err != nil {
+		panic(err)
+	}
+}
+
+var (
+	router    *mux.Router
+	twitsChan chan stocktwits.Message
+	upgrader  = websocket.Upgrader{
+		ReadBufferSize:  1024,
+		WriteBufferSize: 1024,
+	}
+	ws *utils.WebsocketMap
+)
+
+func dataPipe(w http.ResponseWriter, r *http.Request) {
+	conn, err := upgrader.Upgrade(w, r, nil)
+	if err != nil {
+		log.Println(err)
+		return
+	}
+	ws.Set(fmt.Sprint(time.Now().UnixNano()), conn)
+}
+
+func buildRouter() {
+	router.HandleFunc("/", dataPipe)
+}
 
 func main() {
 

@@ -1,9 +1,0 @@
-{
-    "data-sources":{
-        "stocktwits": ["trending"],
-        "reddit": ["top"]
-    },
-    
-    "serve-port": 8492
-    
-}
