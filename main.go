@@ -3,7 +3,6 @@ package main
 import (
 	"flag"
 	"fmt"
-	"log"
 	"net/http"
 	"os"
 	"path"
@@ -11,6 +10,7 @@ import (
 
 	"github.com/gorilla/mux"
 	"github.com/gorilla/websocket"
+	"github.com/mrod502/logger"
 	stocktwits "github.com/mrod502/stocktwitsgo"
 	"github.com/mrod502/stonksbackend/utils"
 )
@@ -38,14 +38,14 @@ var (
 func dataPipe(w http.ResponseWriter, r *http.Request) {
 	conn, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
-		log.Println(err)
+		logger.Error("Upgrade", err.Error())
 		return
 	}
 	ws.Set(fmt.Sprint(time.Now().UnixNano()), conn)
 }
 
 func buildRouter() {
-	router.HandleFunc("/", dataPipe)
+	router.HandleFunc("/ws", dataPipe)
 }
 
 func main() {
