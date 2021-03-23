@@ -144,6 +144,7 @@ func (w WebsocketMap) Broadcast(v interface{}) error {
 	}
 	w.l.Lock()
 	for _, v := range w.v {
+		logger.Info("Broadcast", "broadcasting", string(b), "to", v.v.RemoteAddr().String())
 		v.m <- b
 	}
 	w.l.Unlock()
