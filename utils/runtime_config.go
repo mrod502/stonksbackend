@@ -20,6 +20,8 @@ func init() {
 type RuntimeConfig struct {
 	DataSources map[string][]string `json:"data-sources"`
 	ServePort   int32               `json:"serve-port"`
+	CertFile    string              `json:"cert-file"`
+	KeyFile     string              `json:"key-file"`
 }
 
 //ReadConfig - read file at configPath and load into config
@@ -45,4 +47,16 @@ func ServePort() int32 {
 	configLock.RLock()
 	defer configLock.RUnlock()
 	return config.ServePort
+}
+
+func CertFile() string {
+	configLock.RLock()
+	defer configLock.RUnlock()
+	return config.CertFile
+}
+
+func KeyFile() string {
+	configLock.RLock()
+	defer configLock.RUnlock()
+	return config.KeyFile
 }
