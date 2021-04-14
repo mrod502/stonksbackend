@@ -13,7 +13,7 @@ import (
 
 //CloseHandler - wait for ctrl c to close
 func CloseHandler() {
-	c := make(chan os.Signal)
+	c := make(chan os.Signal, 2)
 	signal.Notify(c, os.Interrupt, syscall.SIGTERM)
 
 	<-c
@@ -23,8 +23,9 @@ func CloseHandler() {
 //EnableCORS - enable cross-origin requests
 func EnableCORS(w *http.ResponseWriter) {
 	(*w).Header().Set("Access-Control-Allow-Origin", "*")
-	(*w).Header().Set("access-control-allow-origin", "*")
-	(*w).Header().Set("Access-Control-Allow-Methods", "GET,OPTIONS,POST")
+	(*w).Header().Set("Access-Control-Allow-Headers", "privatekey")
+	//(*w).Header().Set("access-control-allow-origin", "*")
+	(*w).Header().Set("Access-Control-Allow-Methods", "GET,OPTIONS,POST,HEAD,DELETE,PUT")
 
 }
 

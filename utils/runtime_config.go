@@ -18,10 +18,30 @@ func init() {
 
 //RuntimeConfig - configure the runtime
 type RuntimeConfig struct {
-	DataSources map[string][]string `json:"data-sources"`
-	ServePort   int32               `json:"serve-port"`
-	CertFile    string              `json:"cert-file"`
-	KeyFile     string              `json:"key-file"`
+	DataSources         map[string][]string `json:"data-sources"`
+	ServePort           uint                `json:"serve-port"`
+	EnableTLS           bool                `json:"enable-tls"`
+	CertFile            string              `json:"cert-file"`
+	KeyFile             string              `json:"key-file"`
+	TradingAPIConfig    TradeConfig         `json:"trading-api-config"`
+	MarketdataAPIConfig MarketdataConfig    `json:"marketdata-api-config"`
+}
+type APIConfig struct {
+	Name              string `json:"name"`
+	BaseEndpoint      string `json:"base-endpoint,omitempty"`
+	WebsocketEndpoint string `json:"websocket-endpoint,omitempty"`
+	Key               string `json:"key,omitempty"`
+	UseWebsocket      bool   `json:"use-websocket,omitempty"`
+	Secret            string `json:"secret"`
+}
+
+type TradeConfig struct {
+	APIConfig
+	EnableTrading bool `json:"enable-trading"`
+}
+
+type MarketdataConfig struct {
+	APIConfig
 }
 
 //ReadConfig - read file at configPath and load into config
@@ -43,7 +63,7 @@ func DataSources() map[string][]string {
 }
 
 //ServePort - return serveport
-func ServePort() int32 {
+func ServePort() uint {
 	configLock.RLock()
 	defer configLock.RUnlock()
 	return config.ServePort
@@ -59,4 +79,10 @@ func KeyFile() string {
 	configLock.RLock()
 	defer configLock.RUnlock()
 	return config.KeyFile
+}
+
+func TLSEnabled() bool {
+	configLock.RLock()
+	defer configLock.RUnlock()
+	return config.EnableTLS
 }

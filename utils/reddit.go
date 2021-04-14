@@ -91,7 +91,7 @@ type T3Data struct {
 }
 
 func (t T3Data) GetSymbols() T3Data {
-	t.Symbols = []string{}
+	t.Symbols = GetSymbols(t.Selftext + "\n" + t.Title + "\n" + t.Body)
 	return t
 }
 
@@ -177,9 +177,9 @@ func (b BoardHome) GetAllDiscussion() (t []T3Data, waitTime time.Duration, err e
 			logger.Error("reddit", "GetAllDiscussion", err.Error())
 		}
 		for _, child := range listings.AllChildren() {
-			t = append(t, child.Data)
+			t = append(t, child.Data.GetSymbols())
 		}
-		time.Sleep(time.Second * (time.Duration(safeDivide(reset, remaining)) + 1))
+		time.Sleep((time.Second * time.Duration(safeDivide(reset, remaining))) + time.Second/4)
 		waitTime = time.Second * (time.Duration(safeDivide(reset, remaining)) + 1)
 	}
 	return
@@ -212,7 +212,7 @@ func GetBoard(boardName string) (t []T3Data, waitTime time.Duration, err error) 
 		return
 	}
 	for _, v := range board.Data.Children {
-		t = append(t, v.Data)
+		t = append(t, v.Data.GetSymbols())
 	}
 
 	comments, waitTime, err := board.GetAllDiscussion()
